@@ -1,0 +1,54 @@
+﻿@page "/article/{id}";
+
+@inject ArticleService articles;
+
+<MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.Large">
+    <MudPaper Elevation="1" Class="pa-4">
+        @if (article != null)
+        {
+            <MudText Typo="Typo.body2" GutterBottom Align="Align.Left" Class="mt-4 ml-4">
+                 <i>Posted on: @article.TimeSlot</i>
+            </MudText>
+            <MudText Typo="Typo.h2" GutterBottom Align="Align.Center" Class="mt-16">
+                <b>@article.Title</b>
+            </MudText>
+            <MudText Typo="Typo.subtitle1" GutterBottom Align="Align.Center">
+                <i>@article.Caption</i>
+            </MudText>
+            @if (!string.IsNullOrEmpty(article.ImageUrl))
+            {
+                <div class="d-flex justify-center">
+                    <MudImage Fluid Alt="Image" Src="@article.ImageUrl"/>
+                </div>
+            }
+            <MudText Typo="Typo.body1" Align="Align.Left" Style="margin-left:10%; margin-right:10%; margin-top:5%; margin-bottom:10%">
+                @article.Content
+            </MudText>
+        }
+        else
+        {
+            <MudText Typo="Typo.h4">
+                Article not found!
+            </MudText>
+        }
+    </MudPaper>
+</MudContainer>
+
+@code {
+    [Parameter]
+    public string? Id { get; set; }
+
+    private JsonArticle? article;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await articles.InitializeAsync();
+
+        var id = int.Parse(Id!);
+        if (articles.Articles.TryGetValue(id, out var value))
+        {
+            article = value;
+            StateHasChanged();
+        }
+    }
+}

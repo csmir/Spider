@@ -1,0 +1,43 @@
+﻿@page "/articles";
+
+@inject ArticleService articles;
+@inject NavigationManager navigation;
+
+<MudContainer Class="mt-16 px-8 d-flex" Style="flex-direction:column; flex-wrap: wrap;" MaxWidth="MaxWidth.Large">
+    @foreach (var article in articles.Articles)
+    {
+        <MudItem md="4" Class="d-inline-flex pa-4">
+            <MudPaper Elevation="2" Class="pa-4">
+                <MudText Typo="Typo.h4" GutterBottom>
+                    @article.Value.Title
+                </MudText>
+                <MudText GutterBottom>
+                    @article.Value.Preview
+                </MudText>
+                @if (!string.IsNullOrEmpty(article.Value.ImageUrl))
+                {
+                    <MudImage Fluid Src="@article.Value.ImageUrl" Alt="Image Unavailable..." />
+                }
+                <MudText Typo="Typo.body2">
+                    Posted on: @article.Value.TimeSlot
+                </MudText>
+                <MudButton FullWidth Variant="Variant.Text" Color="Color.Primary" OnClick="() => BrowseArticle(article.Key)">
+                    <b>Read More</b>
+                </MudButton>
+            </MudPaper>
+        </MudItem>
+    }
+</MudContainer>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await articles.InitializeAsync();
+        StateHasChanged();
+    }
+
+    private void BrowseArticle(int id)
+    {
+        navigation.NavigateTo($"/article/{id}");
+    }
+}

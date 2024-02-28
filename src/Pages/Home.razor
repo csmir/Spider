@@ -1,0 +1,62 @@
+﻿@page "/"
+
+@inject ArticleService articles;
+@inject NavigationManager navigation;
+
+<MudContainer Class="mt-8 mb-8 px-8" MaxWidth="MaxWidth.Large">
+    <div class="d-flex justify-center">
+        <MudImage Src="img/planet_nobg.gif" Alt="Icon"/>
+    </div>
+    <MudText Typo="Typo.h1" Align="Align.Center">
+        Armano den Boef
+    </MudText>
+    <MudText Typo="Typo.h3" Align="Align.Center">
+        An OSS developer based in the Netherlands.
+    </MudText>
+</MudContainer>
+<MudContainer MaxWidth="MaxWidth.Large">
+    <MudTimeline TimelineOrientation="TimelineOrientation.Vertical" TimelinePosition="TimelinePosition.Alternate" Reverse="false" >
+        @foreach (var article in articles.Articles)
+        {
+            <MudTimelineItem Color="Color.Primary" Variant="Variant.Filled" Size="Size.Small">
+                <ItemContent>
+                    <MudCard Elevation="1">
+                        <MudCardContent Class="m-8">
+                            <MudText Typo="Typo.h4" GutterBottom>
+                                @article.Value.Title
+                            </MudText>
+                            <MudText Typo="Typo.h6" GutterBottom>
+                                @article.Value.Preview
+                            </MudText>
+                            @if (!string.IsNullOrEmpty(article.Value.ImageUrl))
+                            {
+                                <MudImage Fluid Alt="Lorem Picsum" Src="@article.Value.ImageUrl" />
+                            }
+                            <MudButton FullWidth Variant="Variant.Text" Color="Color.Primary" OnClick="() => BrowseArticle(article.Key)">
+                                 <b>Read More</b>
+                             </MudButton>
+                        </MudCardContent>
+                    </MudCard>
+                 </ItemContent>
+                 <ItemOpposite>
+                     <MudText Typo="Typo.h4">
+                        @article.Value.TimeSlot
+                    </MudText>
+                </ItemOpposite>
+            </MudTimelineItem>
+        }
+    </MudTimeline>
+</MudContainer>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await articles.InitializeAsync();
+        StateHasChanged();
+    }
+
+    private void BrowseArticle(int id)
+    {
+        navigation.NavigateTo($"/article/{id}");
+    }
+}
