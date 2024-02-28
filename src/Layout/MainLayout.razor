@@ -14,7 +14,7 @@
     </MudAppBar>
     <MudDrawer @bind-Open="isDrawerOpen" Elevation="2" Anchor="Anchor.Right">
         <MudDrawerHeader>
-            <MudText Typo="Typo.h5" Class="mt-1">csmir.me</MudText>
+            <MudText Typo="Typo.h5" Class="mt-1">Welcome</MudText>
         </MudDrawerHeader>
         <Navigator/>
     </MudDrawer>
@@ -30,7 +30,6 @@
     private MudThemeProvider? _mudThemeProvider;
     private MudTheme _mudTheme = new SpiderTheme();
 
-    #region Rendering
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -44,5 +43,4 @@
     {
         isDrawerOpen = !isDrawerOpen;
     }
-    #endregion
 }
